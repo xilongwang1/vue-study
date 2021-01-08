@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 写模板 -->
+  <div id="root">
+    <div>
+      <p>{{name}}-{{message}}</p>
+    </div>
+    <p>{{name}}</p>
+    <p>{{message}}</p>
+  </div>
+
+  <script>
+
+
+    let rkuohao = /\{\{(.+?)\}\}/g;
+    // 步骤拆解
+    // 1. 拿到模板
+    // 2. 拿到数据 ( data )
+    // 3. 将数据与模板结合, 得到 的是 HTML 元素 ( DOM 元素 )
+    // 4. 放到页面中
+
+    // 1. 拿到模板
+    let tmpNode = document.querySelector('#root'); // 元素拿到了 模板就是他了
+    // 2  拿到数据 ( data )
+    let data = {
+      name: '一个新name'
+      , message: '一个消息'
+    };
+
+    // 3. 将数据放到模板中( ??? )
+    //  一般都是使用 递归  或特殊算法,队列将递归处理转换成循环处理/ 算法上有广度优先和深度优先
+    // 在现在这个案例中 template 是 DOM 元素,
+    // 在真正的 Vue 源码中是 DOM -> 字符串模板 -> VNode -> 真正的 DOM
+    function compiler(template, data) {
+      let childNodes = template.childNodes; // 取出子元素
+      for (let i = 0; i < childNodes.length; i++) {
+        let type = childNodes[i].nodeType; // 1 元素, 3 文本节点 
+        //   nodetype的十二种类型
+        // 　　1：元素节点
+        // 　　2：属性节点
+        // 　　3：文本节点
+        // 　　4：CDATA区段
+        // 　　5：实体应用元素
+        // 　　6：实体
+        // 　　7：表示处理指令
+        // 　　8：注释节点
+        // 　　9：最外层的Root element,包括所有其他节点
+        // 　　10：<!DOCTYPE...>
+        // 　　11:文档碎片节点
+        // 　　12：DTD中声明的符号节点
+        if (type === 3) {
+          // 文本节点, 可以判断里面是否有 {{}} 插值
+          let txt = childNodes[i].nodeValue; // 该属性只有文本节点才有意义
+
+          // var a = '1{{key}}--2{{value}}';var r = /\{\{(.+?)\}\}/g;
+          // txt.replace(rkuohao, fn(a,b,c,d)) 将fn返回值替换掉{{}}里内容
+          // fn中参数 a为匹配到的字符串，b为对应替换的字符串，c为替换的位置，d为整个要替换的字符串 第一个参数是{{key}}  第二个是 key 第三个是下标  第四个是text
+
+          // 有没有双花括号??? 
+          txt = txt.replace(rkuohao, function (_, g) { // replace 使用正则匹配一次 函数就会被调用一次
+            // 函数的 第 0 个参数 表示匹配到的内容
+            // 函数的 第 n 个参数 表示正则中的 第 n 组
+            let key = g.trim(); // 写在双花括号里面的 东西
+            let value = data[key];
+
+            // 将 {{ xxxx }} 用这个 值替换
+            return value;
+          });
+
+
+          // 注意:  txt 现在和 DOM 元素是没有关系
+          childNodes[i].nodeValue = txt;
+        }
+        else if (type === 1) {
+          // 元素, 考虑它有没有子元素, 是否需要将其子元素进行 判断是否要插值
+          compiler(childNodes[i], data);
+        }
+      }
+    }
+
+    // 利用 模板生成一个 需要被渲染的 HTML 标签 ( 准 真正在页面中显示的 标签 )
+    let generateNode = tmpNode.cloneNode(true); // 注意这里是 DOM 元素, 可以这么用
+
+    // console.log( tmpNode );
+    compiler(generateNode, data); // 将 坑 替换掉
+    // console.log( generateNode );
+
+    // 我们此时是没有生成 新的 template, 所以这里看到的 是直接在页面中就更新的数据, 因为 DOM 是引用类型
+    // 这样做 模板就没有了
+
+    // 4. 将 渲染好的 HTML 加到页面中
+    root.parentNode.replaceChild(generateNode, root);
+
+    // 上面的思路有很大的问题:
+    // 1. Vue 使用的 虚拟 DOM
+    // 2. 只考虑了 单属性 ( {{ name }} ), 而 Vue 中大量的使用层级 ( {{ child.name.firstName }} )
+    // 3. 代码没有整合
+  </script>
+</body>
+
+</html>

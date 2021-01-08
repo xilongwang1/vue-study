@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>截取url</title>
+</head>
+
+<body>
+
+    热启动--自动刷新
+
+    <script>
+        let sUrl = 'http://www.nowcoder.com?key=1&key=2&key=3&test=4#hehe';
+        var a = "123"
+        let sKey = '';
+        /**
+         * 获取 url 中的参数
+         * 1. 指定参数名称，返回该参数的值 或者 空字符串
+         * 2. 不指定参数名称，返回全部的参数对象 或者 {}
+         * 3. 如果存在多个同名参数，则返回数组
+        */
+    
+        function getUrlParam(sUrl, sKey) {
+            let _url = sUrl;
+            // let key = []
+            let result = null;
+            if (sKey) {
+                let key = [];
+                _url.split('?')[1].split('&').forEach(element => {
+                    let _element = element.split('=');
+                    if (sKey == _element[0]) {
+                        key.push(_element[1])
+                    }
+                });
+                result = key;
+                if (key.length == 1) result = key[0];
+            } else {
+                let obj = {};
+                // _url.split('?')[1].split('&').forEach(element => {
+                //     let _element = element.split('=');
+                //     // obj._element[0] = _element[1];
+                //     // console.log(obj, "obj",_element);
+                // });
+                result = obj;
+            }
+            return result;
+        }
+
+//         function getUrlParam(sUrl,sKey){
+//     var result = {};
+//     sUrl.replace(/\??(\w+)=(\w+)&?/g,function(a,k,v){
+//         if(result[k] !== void 0){
+//             var t = result[k];
+//             result[k] = [].concat(t,v);
+//         }else{
+//             result[k] = v;
+//         }
+//     });
+//     if(sKey === void 0){
+//         return result;
+//     }else{
+//         return result[sKey] || '';
+//     }
+// }
+
+        // getUrlParam(sUrl, sKey);
+        console.log(getUrlParam(sUrl, sKey));
+    </script>
+</body>
+
+</html>
