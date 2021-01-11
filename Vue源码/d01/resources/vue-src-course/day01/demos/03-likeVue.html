@@ -90,9 +90,9 @@
     // 利用 模板生成一个 需要被渲染的 HTML 标签 ( 准 真正在页面中显示的 标签 )
     let generateNode = tmpNode.cloneNode(true); // 注意这里是 DOM 元素, 可以这么用
 
-    // console.log( tmpNode );
+    console.log( tmpNode );
     compiler(generateNode, data); // 将 坑 替换掉
-    // console.log( generateNode );
+    console.log( generateNode );
 
     // 我们此时是没有生成 新的 template, 所以这里看到的 是直接在页面中就更新的数据, 因为 DOM 是引用类型
     // 这样做 模板就没有了
