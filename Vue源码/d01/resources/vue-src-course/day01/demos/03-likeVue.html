@@ -18,7 +18,24 @@
     <p>{{message}}</p>
   </div>
 
+  
+
   <script>
+
+    /**
+     * DOM树 元素(模板) 
+     */
+    /**
+     * <div #root />
+     *    div
+     *      p
+     *        {{name}}-{{message}}
+     *    p
+     *      {{name}}
+     *    p
+     *      {{message}}
+     * 
+     */ 
 
 
     let rkuohao = /\{\{(.+?)\}\}/g;
@@ -63,7 +80,7 @@
 
           // var a = '1{{key}}--2{{value}}';var r = /\{\{(.+?)\}\}/g;
           // txt.replace(rkuohao, fn(a,b,c,d)) 将fn返回值替换掉{{}}里内容
-          // fn中参数 a为匹配到的字符串，b为对应替换的字符串，c为替换的位置，d为整个要替换的字符串 第一个参数是{{key}}  第二个是 key 第三个是下标  第四个是text
+          // fn中参数 a为匹配到的字符串，b为对应替换的字符串，c为替换的位置，d为整个要替换的字符串 第一个参数是{{key}}  第二个是 key 第三个是下标  第四个是txt
 
           // 有没有双花括号??? 
           txt = txt.replace(rkuohao, function (_, g) { // replace 使用正则匹配一次 函数就会被调用一次
@@ -96,9 +113,10 @@
 
     // 我们此时是没有生成 新的 template, 所以这里看到的 是直接在页面中就更新的数据, 因为 DOM 是引用类型
     // 这样做 模板就没有了
-
+    // console.log(root.parentNode);
     // 4. 将 渲染好的 HTML 加到页面中
     root.parentNode.replaceChild(generateNode, root);
+    // tmpNode.parentNode.replaceChild(generateNode, tmpNode);
 
     // 上面的思路有很大的问题:
     // 1. Vue 使用的 虚拟 DOM

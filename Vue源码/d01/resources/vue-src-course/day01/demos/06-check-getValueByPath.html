@@ -18,6 +18,7 @@
 
       let res = obj;
       let prop;
+      // console.log(prop = paths.shift());
       while( prop = paths.shift() ) {
         res = res[ prop ];
       }
@@ -36,7 +37,7 @@
       }
     };
 
-    var res = getValueByPath( o, 'a.b.c.d.e' );
+    // var res = getValueByPath( o, 'a.b.c.d.e' );
     var res = getValueByPath( o, 'a.b.c' );
 
 
