@@ -15,7 +15,7 @@
       tags.forEach( key => set[ key ] = true );
 
       return function ( tagName ) {
-        return !!set[ tagName.toLowerCase() ]
+        return !!set[ tagName.toLowerCase() ] // !! 当自定义组件时,为undefined时, !! 为false
       }
     }
 
@@ -23,7 +23,7 @@
 
     // 10 个标签需要判断, 那么还有没有循环存在???
 
-    
+    // currt 会循环一次 之后有缓存
   </script>
 </body>
 </html>

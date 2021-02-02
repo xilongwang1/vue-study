@@ -100,7 +100,7 @@
 
         // 子元素
         let children = vnode.children;
-        children.forEach( subvnode => {
+        children.forEach( subvnode => { // 虚拟DOM
           _node.appendChild( parseVNode( subvnode ) ); // 递归转换子元素 ( 虚拟 DOM )
         } );
 
