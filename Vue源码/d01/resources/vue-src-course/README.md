@@ -46,7 +46,11 @@ Vue 利用 我们提供的数据 和 页面中 模板 生成了 一个新的 HTM
 
 思路与深拷贝类似
 
+## 视频
+
+https://www.bilibili.com/video/BV1LE411e7HE?from=search&seid=2294289640845745144
 
 
+## github
 
-
+https://github.com/kunjiang/vue-src-course

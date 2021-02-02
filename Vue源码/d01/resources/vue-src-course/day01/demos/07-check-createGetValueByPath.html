@@ -42,19 +42,37 @@
 
     console.log(res);
 
+    // function namespace(oNamespace, sPackage) {
+    //   let paths = sPackage.split('.');
+    //   let res = oNamespace;
+    //   for (let index = 0; index < paths.length; index++) {
+    //     const element = paths[index];
+    //     // console.log(oNamespace[element]);
+    //     if(element in oNamespace) {
+    //       if(typeof oNamespace[element] !=='object') {
+    //         oNamespace[element] = {};
+    //       }
+    //     }else {
+    //       oNamespace[element] = {};
+    //     }
+    //     oNamespace = oNamespace[element];
+    //   }
+    //   return res;
+    // }
     function namespace(oNamespace, sPackage) {
-      let paths = sPackage.split('.');
-      let obj = oNamespace;
-      let prop;
-      let obj1;
-      while (prop = paths.shift()) {
-        obj = obj[prop] ? obj[prop] : {}
-        console.log(obj);
+      let list = sPackage.split('.');
+      let tmp = oNamespace;
+      for (var k in list) {
+        if (typeof tmp[list[k]] !== 'object') {
+          tmp[list[k]] = {};
+        }
+        tmp = tmp[list[k]];
       }
-      return obj;
-    }
+      return oNamespace;
+    };
+
     // namespace({a: {test: 1, b: 2}}, 'a.b.c.d')
-    console.log(namespace({ a: { test: 1, b: 2 } }, 'a.b.c.d'));
+    console.log(namespace({ a: { test: 1, b: 2 } }, 'a.b'));
 
 
   </script>

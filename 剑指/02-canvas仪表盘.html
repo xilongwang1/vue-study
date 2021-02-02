@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <title>canvas绘制简易百分比仪表盘dashboard（建议最好用于移动端）</title>
+    <style type="text/css">
+        div{margin:1rem;background:#eee;padding:.3rem; position:relative }
+        div canvas{background:#cacaca;
+            /* -webkit-transform: rotateZ(-180deg);
+            transform:rotateZ(-180deg); */
+            -webkit-animation:ani01 1s ease 0s both;
+            animation:ani01 1s ease 0s both;
+        }
+ 
+        @-webkit-keyframes ani01 {
+            0%{
+                -webkit-transform:scale(.5,.5) rotateZ(-270deg);
+                transform:scale(.5,.5) rotateZ(-270deg);
+            }
+            100%{
+                -webkit-transform:scale(1,1) rotateZ(-90deg);
+                transform:scale(1,1) rotateZ(-90deg);
+            }
+        }
+        @keyframes ani01 {
+            0%{
+                -webkit-transform:scale(.5,.5) rotateZ(-270deg);
+                transform:scale(.5,.5) rotateZ(-270deg);
+            }
+            100%{
+                -webkit-transform:scale(1,1) rotateZ(-90deg);
+                transform:scale(1,1) rotateZ(-90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+ 
+<div>
+    <canvas id="myCanvas1" data-percent="80">
+        您的浏览器不支持canvas标签。
+    </canvas>
+    <span style="display:block;position:absolute;top:.94rem;left:.3rem;width:2rem;text-align:center;font-size:.5rem;font-family:microsoft Yahei" id="dushu" >0</span>
+</div>
+ 
+<script type="text/javascript" src="../js/flexible.js"></script>
+<script type="text/javascript">
+    var pper=0;
+    var pper_interal;
+    var dushu=document.getElementById('dushu');
+ 
+    var aaa=drawCanvanPercent('myCanvas1','rem',2,'#0e9cfa',0.2,'#fff');
+ 
+    function drawCanvanPercent(ele_id,dw,cir_r,cir_color,line_w,fill_color){
+        if(dw=="rem"){
+            cir_r=cir_r*(window.screen.width/10);
+            line_w=line_w*(window.screen.width/10);
+        }
+        var canvas = document.getElementById(ele_id);
+        var circle = {
+            r : cir_r/2,      //圆的半径
+            per : canvas.getAttribute('data-percent'),      //百分比分子
+            color : cir_color,      //圆的颜色
+            lineWidth : line_w      //圆的颜色
+        };
+        canvas.width=canvas.height=circle.r*2;
+        canvas.style.borderRadius="50%";
+        if(canvas.getContext){
+            var ctx2 = canvas.getContext("2d");
+            ctx2.fillStyle = fill_color;
+            ctx2.arc(circle.r, circle.r, circle.r-circle.lineWidth/2, 0, Math.PI*2, false);
+            ctx2.fill();
+            var ctx = canvas.getContext("2d");
+            pper_interal= setInterval(function () {
+                drawMove(ctx,circle);
+            }, 10);
+        }
+    }
+ 
+    function drawMove(ctx,circle){
+        if(pper>=circle.per){
+            pper=circle.per;
+            clearTimeout(pper_interal);
+        }else{
+            pper++;
+        }
+        dushu.innerText=pper+'%';
+        ctx.beginPath();
+        ctx.strokeStyle = circle.color;
+        ctx.lineWidth=circle.lineWidth;
+        ctx.arc(circle.r, circle.r, circle.r, 0, Math.PI*(pper/100)*360/180, false);
+        ctx.stroke();
+    }
+    </script>
+ 
+</body>
+</html>
