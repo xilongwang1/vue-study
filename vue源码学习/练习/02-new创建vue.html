@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>new 创建vue</title>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <p>{{title}}--{{message}}</p>
+        </div>
+        <p>{{title}}</p>
+        <p>{{message}}</p>
+    </div>
+
+    <script>
+
+        let rkuohao = /\{\{(.+?)\}\}/g;
+
+        // 模板结合数据
+        function compiler(template, data) { 
+            let childNodes = template.childNodes;
+            for(let i=0; i<childNodes.length; i++) {
+                let type = childNodes[i].nodeType;
+                if(type === 3 ) {
+                    // 文本节点
+                    let txt = childNodes[i].nodeValue;
+                    txt = txt.replace(rkuohao, function(_,g) {
+                        let key = g.trim();
+                        let value = data[key];
+                        return value;
+                    })
+
+                    childNodes[i].nodeValue = txt;
+
+                }else if(type === 1) {
+                    compiler(childNodes[i], data);
+                }
+            }
+        };
+
+        // 1. vue实例
+        function Vue(options) { 
+            this._el = options.el;
+            this._data = options.data;
+
+            this._template = document.querySelector(this._el);
+            this._parent = this._template.parentNode;
+
+            this.render();
+        };
+
+        // 2. 渲染函数
+        Vue.prototype.render = function () { 
+            this.compiler();
+        };
+
+        // 3. 得到真实DOM
+        Vue.prototype.compiler = function () { 
+            let realHTMLDOM = this._template.cloneNode(true);
+            compiler(realHTMLDOM, this._data);
+            this.update(realHTMLDOM);
+        };
+
+        // 4. 更新到页面
+        Vue.prototype.update = function (real) {
+            this._parent.replaceChild(real, this._template)
+         };
+
+        // 使用
+        let app = new Vue({
+            el: '#root',
+            data: {
+                title: 'WEB前端',
+                message: '从15年进入快车道'
+            }
+        })
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>likeVue</title>
+</head>
+<body>
+    
+
+    <div id="root">
+        <div>
+            <p>{{name}}-{{message}}</p>
+        </div>
+        <p>{{name}}</p>
+        <p>{{message}}</p>
+    </div>
+
+
+    <script>
+        let rkuohao = /\{\{(.+?)\}\}/g;
+
+        // 1. 拿到模板
+        let tmpNode = document.querySelector('#root');
+
+        // 2. 拿到数据 data
+        let data = {
+            name: '詹柳',
+            message: '是一个老师'
+        }
+
+        // 3. 将数据与模板结合,得到的是 HTML 元素 (DOM元素)
+        function compiler(template, data) {
+            let childNodes = template.childNodes; // 拿到全部子元素
+
+            for(let i=0; i<childNodes.length; i++) {
+                let type = childNodes[i].nodeType;  // 1. 元素  3. 文本节点
+
+                if(type === 3 ) {
+                    // 文本节点,判断是否含有 {{}} 插值
+                    let txt = childNodes[i].nodeValue; // 只有文本节点才有意义
+
+                    // 正则匹配 是否含有{{}}
+                    txt = txt.replace(rkuohao, function(_,g) {
+                        // _: {{name}} g: name
+                        let key = g.trim(); // {{}} 的内容 去空
+                        let value = data[key];
+
+                        return value; // 将 {{ key }} 用data的值 替换掉
+                    })
+
+                    // 注意: txt 现在和 DOM 元素是没有关系
+                    childNodes[i].nodeValue = txt;
+
+                }else if(type === 1) {
+                    // 元素, 考虑他有没有子元素,是否需要将其子元素  进行判断是否有插值
+                    compiler(childNodes[i],data)
+                }
+            }
+            console.log(childNodes);
+        }
+        
+        // 利用 模板生成一个需要被渲染的 HTML 标签
+        let generateNode = tmpNode.cloneNode(true);
+
+        console.log(tmpNode);
+        compiler(generateNode,data)
+        console.log(generateNode);
+
+        // 4. 放到页面
+        root.parentNode.replaceChild(generateNode, root)
+
+
+    </script>
+</body>
+</html>

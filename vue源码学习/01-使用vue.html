@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue-demo</title>
+    <!-- 1. 引入vue -->
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 2. 写模板 -->
+    <div id="root">
+        <p>{{name}}</p>
+        <p>{{age}}</p>
+    </div>
+
+    <script>
+        console.log(root); 
+        // 3. 创建实例
+        // debugger
+        let app = new Vue({
+            el: '#root',
+            data: {
+                name: '张三',
+                age: 25
+            }
+
+        })
+        console.log(root);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>likeVue</title>
+</head>
+
+<body>
+
+
+    <div id="root">
+        <div>
+            <p>{{title}}--{{message}}</p>
+        </div>
+        <p>{{title}}</p>
+        <p>{{message}}</p>
+    </div>
+
+
+
+    <script>
+
+        let rkuohao = /\{\{(.+?)\}\}/g; // {{}} 正则表达式
+
+        // 1. 拿到root 元素
+        let tmpNode = document.querySelector('#root');
+
+        // 2. 拿到 data 数据
+        let data = {
+            title: 'WEB前端',
+            message: '从15年进入快车道'
+        }
+
+        // 3. 将root 元素的插值 替换成data的数据
+        function compiler(template, data) {
+            let childNodes = template.childNodes; // 拿到所有子元素
+            console.log(childNodes);
+            for (let i = 0; i < childNodes.length; i++) {
+                let type = childNodes[i].nodeType;
+                if (type === 3) {
+                    // 文本节点, 判断有没有插值 
+                    let txt = childNodes[i].nodeValue;
+                    txt = txt.replace(rkuohao, function(_,g) {
+                        let key = g.trim();
+                        let value = data[key];
+                        return value;
+                    })
+
+                    childNodes[i].nodeValue = txt;
+                } else if (type === 1) {
+                    // 元素节点,检查子元素是否含有插值
+                    compiler(childNodes[i], data)
+                }
+
+            }
+        }
+
+        let generateNode = tmpNode.cloneNode(true);
+        console.log(tmpNode);
+        compiler(generateNode, data);
+        console.log(generateNode);
+
+        // 4. 将 渲染好的 HTML 加到页面上
+        root.parentNode.replaceChild(tmpNode, root)
+
+    </script>
+</body>
+
+</html>

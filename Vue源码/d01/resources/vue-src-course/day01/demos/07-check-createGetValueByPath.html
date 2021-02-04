@@ -59,6 +59,14 @@
     //   }
     //   return res;
     // }
+
+
+
+    /**
+     * 输入: namespace({a: {test: 1, b: 2}}, 'a.b.c.d')
+     * 输出: {a: {test: 1, b: {c: {d: {}}}}}
+     * 
+    */
     function namespace(oNamespace, sPackage) {
       let list = sPackage.split('.');
       let tmp = oNamespace;
@@ -71,8 +79,8 @@
       return oNamespace;
     };
 
-    // namespace({a: {test: 1, b: 2}}, 'a.b.c.d')
-    console.log(namespace({ a: { test: 1, b: 2 } }, 'a.b'));
+    
+    console.log(namespace({ a: { test: 1, b: 2 } }, 'a.c'));
 
 
   </script>
