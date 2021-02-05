@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul>
+        <li>编号1，点击我请弹出1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+
+    <script>
+        /**
+        * 经典场景之一
+        * 通过循环给页面上多个dom节点绑定事件。
+        */
+        // var 变 let 解决
+        var list = document.getElementsByTagName('li')
+        // for (let i = 0; i < list.length; i++) {
+        //     list[i].addEventListener('click', function () {
+        //         alert(i + 1)
+        //     }, true)
+        // }
+
+        // 闭包解决
+        // for (var i = 0; i < list.length; i++) {
+        //     list[i].addEventListener('click', function (i) {
+        //         return function() {
+        //             alert(i + 1)
+        //         }
+        //     }(i), true)
+        // }
+
+        // 自执行函数解决
+        // for (var i = 0; i < list.length; i++) {
+        //     (function () {
+        //         var tmp = i;
+        //         list[i].onclick = function (){
+        //             alert(tmp + 1)
+        //         }
+        //     })()
+        // }
+
+        for (var i = 0; i < list.length; i++) {
+            
+                // return function () {
+                //     alert(i + 1)
+                // }
+                // list[i].onclick = alert(i + 1);
+                // var str = JSON.parse(list[i])
+                var obj = { str: i + 1};
+
+                // var objStr = JSON.parse(JSON.stringify(obj));
+                list[i].onclick = function () {
+                    console.log(objStr.str);
+                };
+            
+        }
+
+    </script>
+</body>
+
+</html>
