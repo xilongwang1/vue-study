@@ -133,6 +133,7 @@
 
 
     function JGVue( options ) {
+      // this._options = options;
       this._data = options.data;
       let elm = document.querySelector( options.el ); // vue 是字符串, 这里是 DOM 
       this._template = elm;
@@ -142,6 +143,9 @@
     }  
 
     JGVue.prototype.mount = function () {
+      // if(typeof this._options.render !== 'function') {} // 自定义render函数
+
+
       // 需要提供一个 render 方法: 生成 虚拟 DOM
       this.render = this.createRenderFn() // 带有缓存 ( Vue 本身是可以带有 render 成员 )
 
