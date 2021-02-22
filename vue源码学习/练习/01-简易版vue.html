@@ -36,7 +36,6 @@
         // 3. 将root 元素的插值 替换成data的数据
         function compiler(template, data) {
             let childNodes = template.childNodes; // 拿到所有子元素
-            console.log(childNodes);
             for (let i = 0; i < childNodes.length; i++) {
                 let type = childNodes[i].nodeType;
                 if (type === 3) {
