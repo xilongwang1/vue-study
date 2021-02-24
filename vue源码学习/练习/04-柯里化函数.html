@@ -20,7 +20,8 @@
                 return !!set[tagName.toLowerCase()]
             }
         }
-        console.log(tags);
+        let isHTMLTag = makeMap( tags );
+        console.log(isHTMLTag('div'));
     </script>
 </body>
 </html>

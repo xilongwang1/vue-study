@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class</title>
+</head>
+
+<body>
+
+
+    <script>
+        /**
+         * 方法一 构造函数法
+        */
+        function Vue() { }
+
+        Vue.prototype.render = function () {
+
+        }
+
+        console.log(new Vue());
+
+        /**
+         * 方法二
+        */
+
+        // 等同于 
+        class VNode {
+            constructor() { // class为类, constructor为类的构造函数
+
+            }
+
+            render() {
+
+            }
+        }
+
+        console.log(new VNode());
+
+        /**
+         * 方法三
+        */
+       function point() {
+
+       };
+        Object.assign(point.prototype, {
+            toString() { },
+            toValue() { }
+        });
+        let app = new point()
+        console.log(app);
+    </script>
+</body>
+
+</html>
