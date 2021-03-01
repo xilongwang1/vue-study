@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>数据驱动</title>
+	</head>
+	<body>
+		<div id="root">
+			<div class="box">
+				<div class="tt1">{{ name }}</div>
+				<div class="tt2">{{ age }}</div>
+				<div class="tt3">{{ gender }}</div>
+				<ul>
+					<li>1 -- {{info.name}}</li>
+					<li>2 -- {{info.age}}</li>
+					<li>3 -- {{info.gender}}</li>
+				</ul>
+			</div>
+		</div>
+
+		<script>
+			/**
+			 * 1. 创建Vue实例
+			 * 2. 生成render函数,缓存抽象语法树(模拟AST), HTML DOM -> VNode
+			 * 3. 将带有坑的 VNode 与数据 data 结合,得到 填充数据的 VNode: 模拟AST -> 新VNode
+			 * 4. 将虚拟 DOM 渲染到页面中: diff 算法就在这里
+			 *
+			 */
+
+			// 1. 创建vue实例
+			function Vue(options) {
+				this._data = options.data
+				this._template = document.querySelector(options.el)
+				this._parent = this._template.parentNode
+
+				this.mount() // 挂载
+			}
+
+			// 2. mount 挂载
+			Vue.prototype.mount = function () {
+				// 需要一个render 方法: 生成虚拟 DOM
+				this.render = this.createRenderFn()
+
+				this.mountComponent()
+			}
+
+			// 3. createRenderFn 生成虚拟 DOM
+			Vue.prototype.createRenderFn = function () {
+				let ast = getVNode(this._template)
+				// Vue: 将 AST + data => VNode
+				// 我们: 带有坑的 VNode + data => 含有数据的 VNode
+				return function render() {
+					let _tmp = combine(ast, this._data)
+					return _tmp
+				}
+			}
+
+			// 4. 将 生成虚拟 DOM 步骤 拆分 -- 虚拟DOM 构造器
+			class VNode {
+				constructor(tag, data, value, type) {
+					this.tag = tag && tag.toLowerCase()
+					this.data = data
+					this.value = value
+					this.type = type
+					this.children = []
+				}
+
+				appendChild(vnode) {
+					this.children.push(vnode)
+				}
+			}
+
+			// 5. 将 生成虚拟 DOM 步骤 拆分 -- 由 HTML DOM -> VNode: 将这个函数当做 compiler 函数
+			function getVNode(node) {
+				let nodeType = node.nodeType
+				let _vnode = null
+				if (nodeType === 1) {
+					// 元素节点
+					let nodeName = node.nodeName
+					let attrs = node.attributes
+					let _attrObj = {}
+					for (let i = 0; i < attrs.length; i++) {
+						_attrObj[attrs[i].nodeName] = attrs[i].nodeValue
+					}
+					_vnode = new VNode(nodeName, _attrObj, undefined, nodeType)
+
+					// 考虑 node 的子元素
+					let childNodes = node.childNodes
+					for (let i = 0; i < childNodes.length; i++) {
+						_vnode.appendChild(getVNode(childNodes[i]))
+					}
+				} else if (nodeType === 3) {
+					// 文本节点
+					_vnode = new VNode(
+						undefined,
+						undefined,
+						node.nodeValue,
+						nodeType
+					)
+				}
+				return _vnode
+			}
+
+			// 6. 将 数据结合, 生成新 VNode 步骤 拆分 -- 根据深层路径 访问对象成员
+			function getValueByPath(obj, path) {
+				let paths = path.split('.')
+				let res = obj
+				let prop
+				while ((prop = paths.shift())) {
+					res = res[prop]
+				}
+				return res
+			}
+
+			// 7. 将 数据结合, 生成新 VNode 步骤 拆分 -- 将 带有坑的 Vnode 与数据 data 结合,得到 填充数据的 VNode: 模拟 AST => VNode
+			let rkuohao = /\{\{(.+?)\}\}/g
+			function combine(vnode, data) {
+				let _tag = vnode.tag
+				let _data = vnode.data
+				let _value = vnode.value
+				let _type = vnode.type
+				let _children = vnode.children
+				let _vnode = null
+
+				if (_type === 3) {
+					// 文本节点
+					_value = _value.replace(rkuohao, function (_, g) {
+						return getValueByPath(data, g.trim())
+					})
+					_vnode = new VNode(_tag, _data, _value, _type)
+				} else if (_type === 1) {
+					// 元素节点
+					_vnode = new VNode(_tag, _data, _value, _type)
+					_children.forEach((_subvnode) => {
+						_vnode.appendChild(combine(_subvnode, data))
+					})
+				}
+				return _vnode
+			}
+
+			// 8. 将 虚拟 DOM 转换成真正的 DOM
+			function parseVNode(vnode) {
+				let type = vnode.type
+				let _node = null
+				if (type === 3) {
+					// 创建文本节点
+					return document.createTextNode(vnode.value)
+				} else if (type === 1) {
+					// 创建元素节点
+					_node = document.createElement(vnode.tag)
+
+					// 属性
+					let data = vnode.data //
+					Object.keys(data).forEach((key) => {
+						let attrName = key
+						let attrValue = data[key]
+						_node.setAttribute(attrName, attrValue)
+					})
+
+					// 子元素
+					let children = vnode.children
+					children.forEach((subvnode) => {
+						_node.appendChild(parseVNode(subvnode)) // 递归转化子元素
+					})
+					return _node
+				}
+			}
+
+			// 9. 调用 update / render 刷新页面
+			Vue.prototype.mountComponent = function () {
+				let mount = () => {
+					this.update(this.render())
+				}
+				mount.call(this)
+			}
+
+			// 10. 将 虚拟 DOM 渲染到页面中: diff 算法在这里
+			Vue.prototype.update = function (vnode) {
+				let realDOM = parseVNode(vnode)
+				console.log(realDOM)
+				this._parent.replaceChild(realDOM, this._template)
+			}
+
+			let app = new Vue({
+				el: '#root',
+				data: {
+					title: '自定义Vue组件',
+					name: '陈梅',
+					age: 25,
+					gender: '女',
+					info: {
+						name: '张凯',
+						age: 26,
+						gender: '男',
+					},
+				},
+			})
+		</script>
+	</body>
+</html>

@@ -127,7 +127,7 @@
 				if (_type === 3) {
 					// 文本节点
 					// 对文本处理
-					_value = _value.replace(rkuohao, function (_,g) {
+					_value = _value.replace(rkuohao, function (_, g) {
 						return getValueByPath(data, g.trim())
 					})
 
@@ -147,7 +147,7 @@
 			function Vue(options) {
 				this._data = options.data
 				this._template = document.querySelector(options.el) // Vue是字符串,这里是 DOM
-                this._parent = this._template.parentNode;
+				this._parent = this._template.parentNode
 
 				this.mount() // 挂载
 			}
@@ -195,17 +195,19 @@
 			let app = new Vue({
 				el: '#root',
 				data: {
-                    title: '自定义Vue组件',
+					title: '自定义Vue组件',
 					name: '张三',
 					age: 19,
-                    gender: '男',
-                    info: {
-                        name: '张三',
-                        name1: '李四',
-                        name2: '王五'
-                    }
+					gender: '男',
+					info: {
+						name: '张三',
+						name1: '李四',
+						name2: '王五',
+					},
 				},
 			})
+
+      app.name = "wangwu " // 这个赋值已完成, 页面未重新渲染
 		</script>
 	</body>
 </html>

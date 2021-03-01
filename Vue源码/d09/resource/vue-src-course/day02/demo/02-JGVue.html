@@ -151,8 +151,11 @@
 			// 将虚拟 DOM 渲染到页面中: diff 算法就在里
 			JGVue.prototype.update = function () {
 				// 简化, 直接生成 HTML DOM replaceChild 到页面中
-                let realDOM = parseVNode( vnode );
-                this._parent.replaceChild( realDOM, document.querySelector( '#root' ) );
+				let realDOM = parseVNode(vnode)
+				this._parent.replaceChild(
+					realDOM,
+					document.querySelector('#root')
+				)
 			}
 
 			let app = new JGVue({
