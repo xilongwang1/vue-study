@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script>
+    /**
+     * 1. 函数模式
+     * 特点: 独立的运行,调用语法格式前面没有任何引导数据
+     * 前面不能有 '通过 xxx 得到函数名' 这个行为
+     */ 
+    function foo() {
+      console.log('函数模式: ', this);
+    }
+    foo()
+
+    /**
+     * 2. 构造器模式
+     * 我们需要知道构造器的执行过程
+     * 语法: new 构造函数()
+     * 
+     */
+    function Person() {
+      console.log('构造器模式:',this);
+    }
+    var p = new Person();
+
+    // 1. 先使用 new 运算符 分配内存空间,在js中创建对象 (一个空对象,一个具有原型结构的对象)
+    //  - 空对象表示没有 自己的 任何成员
+    //  - 具有原型结构,该对象的原型 (__prop__) 是 Person.prototype
+    // 2. 调用构造函数
+    //  - 创建活动对象
+    //  - this 创建的对象的引用会作为 活动的对象中的 上下文对象被引用
+    //  - 预解析
+    //  - 解释执行
+    //  - ...
+
+    /**
+     * 3. 方法调用模式
+     * 一个函数作为对象的一个成员,由对象引导调用,这个调用就是方法调用
+     * 表现就是 调用前有一个引导数据: 满足 通过 xxx 访问方法名 调用
+     */ 
+    var o1 = {
+      sayHello: function () {console.log('方法调用: ',this);}
+    }
+    o1.sayHello(); // 方法调用: sayHello 是通过 o1 引导的得到的
+
+    o1.func = foo;
+    o1.func(); // 方法调用, 因为 通过 o1引导得到的函数再调用
+    foo() // 函数调用
+
+    /**
+     * 4. 上下文语法
+     * 函数名.call(上下文, 参数1, 参数2, ...) 可以由任意个参数
+     * 函数名.apply(上下文, [参数,...]) 最多两个参数
+     */ 
+    // 1. 有几个参数???
+    // 2. 调用的意译: 无论是 函数的正常调用,还是call 调用,还是 apply 调用其实都是在调用函数
+    
+    // foo 和 o.fun 上下文不一样  结果也会不一样
+
+    var arr = [];
+    arr.push(foo);
+    var fn = arr[0];
+    fn(); // 函数
+    arr[0]() // 
+
+    // 面试题
+    var f;
+    (f = o1.sayHello)(); // 方法调用
+    
+    // 词法分析,运行原理
+    // 晦涩
+    // 赋值运算,是分为两步操作
+    // 1. 将 = 右边 的值取出( 求出 ),取出东西 与 原本的 东西并不相同
+    // 2. 将 取出的数据 存储到 = 右边的变量 表示容器中
+
+    // 赋值表达式的值就是取出的那个值
+    // 所以此时是在调用取出的那个东西
+
+  </script>
+  
+</body>
+</html>
