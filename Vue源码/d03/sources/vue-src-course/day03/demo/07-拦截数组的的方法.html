@@ -39,7 +39,8 @@
     } );
 
     arr.__proto__ = array_methods;
-
+    let a = arr.push(1,2)
+    console.log(arr,a);
 
     // Vue 的源码中也做了判断
     // 如果 浏览器支持 __proto__ 那么他就这么做
