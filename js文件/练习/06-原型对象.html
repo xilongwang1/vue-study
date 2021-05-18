@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<script>
+			    // 从上方 function Foo() 开始分析这一张经典之图
+			function Foo() {}
+			let f1 = new Foo();
+			let f2 = new Foo();
+
+			// f1.__proto__ = Foo.prototype; // 准则2
+			// f2.__proto__ = Foo.prototype; // 准则2
+      console.log(Foo.__proto__ === Function.prototype);
+			// Foo.prototype.__proto__ = Object.protitype; // 准则2 (Foo.prototype本质也是普通对象，可适用准则2)
+			// Object.prototype.__proto__ = null; // 原型链到此停止
+			// Foo.prototype.constructor = Foo; // 准则1
+			// Foo.__proto__ = Function.prototype; // 准则2
+			// Function.prototype.__proto__  = Object.protitype; //  准则2 (Function.prototype本质也是普通对象，可适用准则2)
+			// Object.prototype.__proto__ = null; // 原型链到此停止
+			// // **此处注意Foo 和 Function的区别， Foo是 Function的实例**
+
+			// // 从中间 Function Object()开始分析这一张经典之图
+			// function Object(){}
+			// let o1 = new  Object();
+			// let o2 = new  Object();
+
+			// o1.__proto__ = Object.prototype; // 准则2
+			// o2.__proto__ = Object.prototype; // 准则2
+			// Object.prototype.__proto__ = null; // 原型链到此停止
+			// Object.prototype.constructor = Object; // 准则1
+			// Object.__proto__ = Function.prototype // 准则2 (Object本质也是函数)；
+      // console.log(Object.__proto__ === Function.prototype);
+			// // 此处有点绕，Object本质是函数，Function本质是对象
+			// Function.prototype.__proto__ =  Object.prototype; // 准则2 (Function.prototype本质也是普通对象，可适用准则2)
+			// Object.prototype.__proto__ = null; // 原型链到此停止
+
+			// // 从下方 Function Function()开始分析这一张经典之图
+			let f3 = function Function(){}
+      console.log(f3.__proto__ === Function.prototype);
+			// f1.__proto__ = Function.prototype // 准则2
+			// Function.prototype.constructor = Function; // 准则1
+		</script>
+	</body>
+</html>

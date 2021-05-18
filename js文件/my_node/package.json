@@ -1,0 +1,15 @@
+{
+  "name": "my_node",
+  "version": "1.0.0",
+  "description": "'first project'",
+  "main": "main.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "keywords": [
+    "'first",
+    "project'"
+  ],
+  "author": "xilongwang",
+  "license": "ISC"
+}
