@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>缓存函数</title>
+	</head>
+	<body>
+		<script>
+			// 缓存函数
+
+      // 原理为 闭包 + 高阶函数
+			const memorize = function (fn) {
+        const cache = {} // 存储缓存数据的对象
+        console.log(111);
+				return function (...args) {
+          // 这里用到数组的扩展运算符
+					const _args = JSON.stringify(args) // 将参数作为cache的key
+          console.log(cache);
+					return cache[_args] || (cache[_args] = fn.apply(fn, args)) // 如果已经缓存过，直接取值。否则重新计算并且缓存
+				}
+			}
+
+			const add = function (a, b) {
+				console.log('开始缓存')
+				return a + b
+			}
+
+			const adder = memorize(add)
+      // console.log(adder(2,6)); // 实际没有传入参数
+      // console.log(adder(2,6));
+      console.log(memorize(add)(2,6));
+      console.log(memorize(add)(2,6));
+      /**
+       * 缓存函数
+       * 1. 执行memorize函数 判断闭包内变量有没有缓存
+       * 2. 
+       */
+		</script>
+	</body>
+</html>

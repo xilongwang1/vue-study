@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>处理对象</title>
+</head>
+
+<body>
+
+
+    <script>
+
+        let obj = {
+            a: {
+                b: {
+                    c: {
+                        d: {
+                            e: '正确了'
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * 获取 obj 里 path 对应的值
+         * obj Object 参照数据
+         * path String 路径
+        */
+        function getValueByPath(obj, path) {
+            let paths = path.split('.');
+            console.log(paths);
+            let res = obj;
+            let prop;
+            // 方法一
+            // paths.forEach(ele => {
+            //     res = res[ele];
+            // })
+            // 方法二
+            while (prop = paths.shift()) {
+                res = res[prop];
+            }
+
+            return res;
+        }
+
+        let res = getValueByPath(obj, 'a.b.c');
+        console.log(res);
+
+
+        /**
+         * 获取 obj 里 path 对应的值,没有就创建设为 {};
+         * obj Object 参照数据
+         * path String 路径
+        */
+        function setValueByPath(obj, path) {
+            let paths = path.split('.');
+            let tmp = obj;
+            for (var key in paths) {
+                // console.log(tmp[paths[key]]);
+                if (typeof tmp[paths[key]] !== 'object') {
+                    tmp[paths[key]] = {};
+                }
+                tmp = tmp[paths[key]];
+            }
+            console.log(obj);
+            return tmp
+        }
+
+        let name = setValueByPath(obj, 'a.b.c.e')
+        console.log(name);
+
+
+        /**
+         * 输入: namespace({a: {test: 1, b: 2}}, 'a.b.c.d')
+         * 输出: {a: {test: 1, b: {c: {d: {}}}}}
+         * 
+        */
+        function namespace(oNamespace, sPackage) {
+            let list = sPackage.split('.');
+            let tmp = oNamespace;
+            for (var k in list) {
+                if (typeof tmp[list[k]] !== 'object') {
+                    tmp[list[k]] = {};
+                }
+                tmp = tmp[list[k]];
+            }
+            return oNamespace;
+        };
+
+
+        console.log(namespace({ a: { test: 1, b: 2 } }, 'a.b.c.d'));
+    </script>
+</body>
+
+</html>

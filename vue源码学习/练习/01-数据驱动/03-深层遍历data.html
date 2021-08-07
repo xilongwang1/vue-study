@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <p>{{info.name}}</p>
+        <p>{{info.product.message}}</p>
+    </div>
+
+    <script>
+        // 1. 深层遍历data
+        function getValueByPath(obj, path) {
+            let paths = path.split('.');
+            let res = obj;
+            let prop;
+            while (prop = paths.shift()) {
+                res = res[prop];
+            }
+            return res;
+        }
+
+        let rkuohao = /\{\{(.+?)\}\}/g;
+
+        // 2. compiler 处理
+        function compiler(template, data) {
+            let childNodes = template.childNodes;
+            for (let i = 0; i < childNodes.length; i++) {
+                let type = childNodes[i].nodeType;
+                if (type === 3) {
+                    let txt = childNodes[i].nodeValue;
+                    txt = txt.replace(rkuohao, function (_, g) {
+                        let path = g.trim();
+                        let value = getValueByPath(data, path);
+
+                        return value;
+                    })
+                    childNodes[i].nodeValue = txt;
+                } else if (type === 1) {
+                    compiler(childNodes[i], data);
+                }
+            }
+        }
+
+
+        // 3. vue 实例
+        function Vue(options) {
+            this._el = options.el;
+            this._data = options.data;
+
+            this._template = document.querySelector(this._el);
+            this._parent = this._template.parentNode;
+
+            this.render();
+        }
+
+
+        // 4. render 函数
+        Vue.prototype.render = function () {
+            this.compiler();
+        }
+
+
+        // 5. compiler 函数
+        Vue.prototype.compiler = function () {
+            let realHTMLDOM = this._template.cloneNode(true);
+            console.log(this._template);
+            compiler(realHTMLDOM, this._data);
+            this.update(realHTMLDOM);
+            console.log(realHTMLDOM);
+        }
+
+        // 6. update 函数
+        Vue.prototype.update = function (real) {
+            this._parent.replaceChild(real, this._template);
+        }
+
+
+        // 创建实例
+        let vm = new Vue({
+            el: '#root',
+            data: {
+                info: {
+                    name: '刘查',
+                    product: {
+                        message: '实现了区块链技术的快速迭代'
+                    }
+                }
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>

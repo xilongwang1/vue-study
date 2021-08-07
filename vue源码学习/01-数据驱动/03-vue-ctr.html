@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue-ctr</title>
+</head>
+<body>
+    <!-- 写模板 -->
+    <div id="root">
+        <div>
+            <p>{{name}}--{{message}}</p>
+        </div>
+        <p>{{name}}</p>
+        <p>{{message}}</p>
+    </div>
+
+    <script>
+
+        let rkuohao = /\{\{(.+?)\}\}/g;
+
+        function compiler(template, data) {
+            let childNodes = template.childNodes; // 拿到所有子元素
+            console.log(childNodes);
+            for (let i = 0; i < childNodes.length; i++) {
+                let type = childNodes[i].nodeType;
+                if (type === 3) {
+                    // 文本节点, 判断有没有插值 
+                    let txt = childNodes[i].nodeValue;
+                    txt = txt.replace(rkuohao, function(_,g) {
+                        let key = g.trim();
+                        let value = data[key];
+                        return value;
+                    })
+
+                    childNodes[i].nodeValue = txt;
+                } else if (type === 1) {
+                    // 元素节点,检查子元素是否含有插值
+                    compiler(childNodes[i], data)
+                }
+
+            }
+        }
+
+        function JGVue(options) {
+            // 习惯: 内部数据使用下划线开头, 只读数据使用 $ 开头
+            this._el = options.el;
+            this._data = options.data;
+
+            // 准备工作 ( 准备模板 )
+            this._templateDOM = document.querySelector(this._el);
+            this._parent = this._templateDOM.parentNode;
+
+            // 渲染工作
+            this.render();
+        };
+
+        // 将模板结合数据, 得到 HTML 加到页面中
+        JGVue.prototype.render = function () {
+            this.compiler();
+        };
+
+        // 编译, 将模板与数据结合, 得到真正的DOM 元素
+        JGVue.prototype.compiler = function () {
+            let realHTMLDOM = this._templateDOM.cloneNode(true);
+            console.log(this._templateDOM);
+            compiler(realHTMLDOM, this._data);
+            console.log(realHTMLDOM);
+            this.update(realHTMLDOM);
+        };
+
+        // 将 DOM 元素放到页面中
+        JGVue.prototype.update = function (real) {
+            this._parent.replaceChild(real, this._templateDOM)
+        };
+
+
+        let app = new JGVue({
+            el: '#root',
+            data: {
+                name: "指数",
+                message: '员工'
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>规格</title>
+</head>
+
+<body>
+
+    <div class="app"></div>
+    <script>
+        // let attrArr = ['颜色', '尺寸']
+        // let colorArr = ['红色', '黄色'];
+        // let sizeArr = ['M', 'L', 'S'];
+        // let arr = [];
+        // let row = '', col = '';
+        // let attr = '';
+        // for (let i = 0; i < colorArr.length; i++) {
+        //     col += `<th rowspan="3">${colorArr[i]}</th>`;
+        //     for (let j = 0; j < sizeArr.length; j++) {
+        //         row += `<tr><td>${sizeArr[j]}</td></tr>`;
+        //         arr.push({
+        //             attr: `${colorArr[i]},${sizeArr[j]}`,
+        //             color: colorArr[i],
+        //             size: sizeArr[j]
+        //         })
+        //     }
+        // }
+
+        // for (let i = 0; i < attrArr.length; i++) {
+        //     attr += `<th>${attrArr[i]}</th>`
+
+        // }
+
+        // let app = document.querySelector('.app')
+        // console.log(app);
+        // app.innerHTML = `<table border='1'>
+        //     <tr>
+        //         <th>${attr}</th>
+        //     </tr>
+
+        //         ${col}
+
+        // </table>`
+        // console.table(arr);
+
+        // console.log(navigator);
+
+
+        let staffList = [
+            {
+                staffId: 1,
+                staffNickName: "Edison",
+                status: 0, // 0 待确认 1已确认 2已过期
+                countDown: 10,
+                // tag: "01",
+            },
+            {
+                staffId: 2,
+                staffNickName: "Mark",
+                status: 1, // 0 待确认 1已确认 2已过期
+                countDown: 15,
+                // tag: "02",
+            },
+            {
+                staffId: 3,
+                staffNickName: "Jerry",
+                status: 2, // 0 待确认 1已确认 2已过期
+                countDown: 0,
+                // tag: "03",
+            },
+            {
+                staffId: 1,
+                staffNickName: "Edison",
+                status: 0, // 0 待确认 1已确认 2已过期
+                countDown: 10,
+                // tag: "01",
+            },
+            {
+                staffId: 2,
+                staffNickName: "Mark",
+                status: 1, // 0 待确认 1已确认 2已过期
+                countDown: 15,
+                // tag: "02",
+            },
+            {
+                staffId: 3,
+                staffNickName: "Jerry",
+                status: 2, // 0 待确认 1已确认 2已过期
+                countDown: 0,
+                // tag: "03",
+            },
+            {
+                staffId: 1,
+                staffNickName: "Edison",
+                status: 0, // 0 待确认 1已确认 2已过期
+                countDown: 10,
+                // tag: "01",
+            },
+            {
+                staffId: 2,
+                staffNickName: "Mark",
+                status: 1, // 0 待确认 1已确认 2已过期
+                countDown: 15,
+                // tag: "02",
+            },
+            {
+                staffId: 3,
+                staffNickName: "Jerry",
+                status: 2, // 0 待确认 1已确认 2已过期
+                countDown: 0,
+                // tag: "03",
+            },
+            {
+                staffId: 1,
+                staffNickName: "Edison",
+                status: 0, // 0 待确认 1已确认 2已过期
+                countDown: 10,
+                // tag: "01",
+            },
+            {
+                staffId: 2,
+                staffNickName: "Mark",
+                status: 1, // 0 待确认 1已确认 2已过期
+                countDown: 15,
+                // tag: "02",
+            },
+            {
+                staffId: 3,
+                staffNickName: "Jerry",
+                status: 2, // 0 待确认 1已确认 2已过期
+                countDown: 0,
+                // tag: "03",
+            },
+        ];
+        console.log(staffList);
+        let result = staffList.reduce((arr, ele, index) => {
+            let obj = ele;
+            console.log(index);
+            if (index < 9) {
+                obj.tag = '0' + (index + 1)
+            } else {
+                obj.tag = '' + (index + 1)
+            }
+            arr.push(obj);
+            return arr;
+        }, []);
+
+        console.log(result);
+    </script>
+</body>
+
+</html>

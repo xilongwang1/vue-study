@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+
+    <button>按钮</button>
+    
+		<script>
+			function formatSeconds(value) {
+				var theTime = parseInt(value) // 秒
+				var theTime1 = 0 // 分
+				var theTime2 = 0 // 小时
+				// alert(theTime);
+				if (theTime > 60) {
+					theTime1 = parseInt(theTime / 60)
+					theTime = parseInt(theTime % 60)
+					// alert(theTime1+"-"+theTime);
+					if (theTime1 > 60) {
+						theTime2 = parseInt(theTime1 / 60)
+						theTime1 = parseInt(theTime1 % 60)
+					}
+				}
+				var result = '' + parseInt(theTime) + '秒'
+				if (theTime1 > 0) {
+					result = '' + parseInt(theTime1) + '分' + result
+				}
+				if (theTime2 > 0) {
+					result = '' + parseInt(theTime2) + '小时' + result
+				}
+				return result
+			}
+
+			let groupDetailInterval = null
+			function waitIntervalDetail(countdown) {
+				clearInterval(groupDetailInterval)
+				let miniteHome = 0,
+					secondHome = 0,
+					hourHome = 0
+				// let userGroupInfo = userGroupInfo
+				groupDetailInterval = setInterval(() => {
+					countdown = countdown - 1
+					hourHome = Math.floor(countdown / 60 / 60)
+					miniteHome =
+						Math.floor((countdown / 60) % 60) < 10
+							? `0${Math.floor((countdown / 60) % 60)}`
+							: Math.floor((countdown / 60) % 60)
+					secondHome =
+						Math.floor(countdown % 60) < 10
+							? `0${Math.floor(countdown % 60)}`
+							: Math.floor(countdown % 60)
+					if (countdown == 0) {
+						clearInterval(groupDetailInterval)
+					}
+					return miniteHome + secondHome + hourHome
+				}, 1000)
+        
+			}
+
+			// formatSeconds(720)
+			// waitIntervalDetail(720)
+      // var btn = document.querySelector('button');
+      // console.log(btn);
+      // var fn = function(){
+      //   alert('111')
+      // }
+      // var fn1 = fn
+      // btn.onclick = fn1
+
+      formatSeconds(720)
+     let fn1 = waitIntervalDetail(720)
+     console.log(fn1);
+		</script>
+	</body>
+</html>

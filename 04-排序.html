@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<script>
+			let arr = [
+				{
+					goodsId: 1,
+					goodsName: '发膜',
+					goodsNum: '1561556',
+					totalNumber: 100,
+					number: 10,
+					totalAmount: 100,
+					amount: 19,
+				},
+				{
+					goodsId: 1,
+					goodsName: '洗发水',
+					goodsNum: '1561556',
+					totalNumber: 100,
+					number: 20,
+					totalAmount: 100,
+					amount: 18,
+				},
+				{
+					goodsId: 1,
+					goodsName: '染发霜',
+					goodsNum: '1561556',
+					totalNumber: 100,
+					number: 30,
+					totalAmount: 100,
+					amount: 17,
+				},
+				{
+					goodsId: 1,
+					goodsName: '护发素',
+					goodsNum: '1561556',
+					totalNumber: 100,
+					number: 40,
+					totalAmount: 100,
+					amount: 16,
+				},
+			]
+
+      // let meter = 'number'
+      let meter = 'amount'
+
+
+      function fn(type = 'number',sort = 'desc') {
+        let result = [];
+        if(sort == 'desc') {
+          result = arr.sort((a, b) => {
+            return b[type] - a[type];
+          });
+        }else if(sort == 'asc'){
+          result = arr.sort((a, b) => {
+            return a[type] - b[type]
+          });
+        }
+
+        return result
+      }
+      console.log(fn(meter,'asc'));
+		</script>
+	</body>
+</html>

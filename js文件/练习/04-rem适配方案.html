@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        document.documentElement.style.fontSize =
+            (100 * window.innerWidth) / 375 + "px";
+        window.addEventListener("load", function () {
+            setTimeout(() => {
+                document.documentElement.style.fontSize =
+                    (100 * window.innerWidth) / 375 + "px";
+                window.unit = (100 * window.innerWidth) / 375;
+                let e = document.createEvent("Event");
+                e.initEvent("adjustReady", true, true);
+                window.dispatchEvent(e);
+            }, 480);
+        });
+        window.onresize = () => {
+            setTimeout(() => {
+                document.documentElement.style.fontSize =
+                    (100 * window.innerWidth) / 375 + "px";
+            }, 480);
+        };
+        window.addEventListener("orientationchange", () => {
+            setTimeout(() => {
+                document.documentElement.style.fontSize =
+                    (100 * window.innerWidth) / 375 + "px";
+            }, 480);
+        });
+
+    </script>
+
+    <style>
+        html,body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav {
+            display: flex;
+        }
+
+        .nav .nav-item {
+            flex: 1;
+            text-align: center;
+            font-size: 0.14rem;
+        }
+
+        .app {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .app .box {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            width: 0.1rem;
+            height: 0.1rem;
+            background: #000;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+        <div class="box"></div>
+    </div>  
+
+
+    <div class="nav">
+        <div class="nav-item">首页最大的都是</div>
+        <div class="nav-item">商城</div>
+        <div class="nav-item">购物车</div>
+        <div class="nav-item">我的</div>
+    </div>
+</body>
+
+</html>

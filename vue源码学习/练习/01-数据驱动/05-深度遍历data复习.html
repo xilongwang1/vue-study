@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度遍历对象</title>
+</head>
+
+<body>
+    <!-- 写模板 -->
+    <div id="root">
+        <p>{{name.firstName}}</p>
+        <p>{{name.obj.name}}</p>
+        <ui>
+            <li></li>
+        </ui>
+    </div>
+
+    <script>
+
+        // 深度遍历对象
+        function getValueByPath(obj, path) {
+            let paths = path.split('.');
+            let res = obj;
+            let prop;
+            while (prop = paths.shift()) {
+                res = res[prop];
+            }
+            return res;
+        }
+
+
+        // 转换虚拟DOM
+        let rkuohao = /\{\{(.+?)\}\}/g
+        function compiler(template, data) {
+            let childNodes = template.childNodes;
+            // childNodes  nodeType  nodeValue
+            for (let i = 0; i < childNodes.length; i++) {
+                let type = childNodes[i].nodeType;
+                if (type === 3) {
+                    let txt = childNodes[i].nodeValue;
+                    txt = txt.replace(rkuohao, function (_, g) {
+                        let path = g.trim();
+                        let value = getValueByPath(data, path);
+                        return value;
+                    })
+                    childNodes[i].nodeValue = txt;
+                } else if (type === 1) {
+                    compiler(childNodes[i], data);
+                }
+            }
+        }
+
+
+        function Vue(options) {
+            this._el = options.el;
+            this._data = options.data;
+
+            this._template = document.querySelector(this._el);
+            this._parent = this._template.parentNode;
+
+            this.render();
+        }
+
+        Vue.prototype.render = function () {
+            this.compiler();
+        }
+
+        Vue.prototype.compiler = function () {
+            let realHTMLDOM = this._template.cloneNode(true);
+            compiler(realHTMLDOM, this._data);
+            this.update(realHTMLDOM);
+        }
+
+        Vue.prototype.update = function (real) {
+            this._parent.replaceChild(real, this._template);
+        }
+
+
+        let app = new Vue({
+            el: '#root',
+            data: {
+                name: {
+                    firstName: '宁海',
+                    obj: {
+                        name: '深层李四'
+                    }
+                },
+                list: [
+                    {
+                        name: '张三'
+                    }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>
